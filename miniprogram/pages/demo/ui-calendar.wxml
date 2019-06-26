@@ -1,0 +1,29 @@
+<view class="date">
+  <image class="direction" src="../../../../../images/icon_direction_left.png" bindtap='minusMouth'/>
+    <label>{{year}}年{{mouth}}月</label>
+    <image class="direction" src="../../../../../images/icon_direction_right.png" bindtap='plusMouth' />
+</view>
+<view class="header">
+    <block wx:for="{{weeks}}" wx:key="index">
+        <text class="weeks-item-text">{{item}}</text>
+    </block>
+</view>
+<view class="body-days">
+    <block wx:for="{{days}}" wx:key="index">
+        <view class="days-item" >
+            <view  data-year="{{year}}" data-month="{{mouth}}" data-value="{{item}}" bindtap='getdayinfo' class="days-item-text" wx:if="{{item>0}}" >{{item}}</view>
+        </view>
+    </block>
+</view>
+<view class="section">
+
+  <view class="flex-wrp" style="height: 300px;flex-direction:column;">
+    <block wx:for="{{dayInfos}}" wx:key="index">
+    <view class="flex-item bc_green">
+       <view class='ContentText'><label>{{item.name}}</label><button bindtap='book'>预约</button></view>
+    </view>
+    </block>
+    
+  </view>
+</view>
+ 
