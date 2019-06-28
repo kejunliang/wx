@@ -29,6 +29,8 @@ Page({
                 avatarUrl: res.userInfo.avatarUrl,
                 userInfo: res.userInfo
               })
+              console.log(res.userInfo )
+              app.globalData.userInfo = res.userInfo     // 取得全局变量需要的值
             }
           })
         }
