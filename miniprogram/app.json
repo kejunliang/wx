@@ -17,7 +17,7 @@
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "云开发 QuickStart",
+    "navigationBarTitleText": "东方爱婴预约系统",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",
@@ -37,7 +37,7 @@
       {      
        
         "pagePath": "pages/index/index",
-        "text": "测试"
+        "text": "我"
       }
     ]
   }

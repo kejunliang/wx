@@ -13,8 +13,8 @@ Page({
     mouth: 0,
     flag:true,
     dayInfos: [
-                {"name": "课程1"},
-                { "name": "课程2"}
+                {"name": "17:00-18:00"},
+               { "name": "18:00-19:00"}
               ],
   },
 
@@ -103,19 +103,41 @@ Page({
     console.log("点击当天事件")
    
     console.log(e)
-    
+    var openid = getApp().globalData.openid //获取用户信息
+    console.log("openid" + openid)
+
     var year = e.currentTarget.dataset.year
     var month = e.currentTarget.dataset.month
     var day = e.currentTarget.dataset.value
     console.log(year+"-"+month+"-"+day)
     var date = year + "-" + month + "-" + day
     var dayInfos = [
-      { "name": "课程1", "year": year, "month": month, "day": day, "date": date },
-      { "name": "课程2", "year": year, "month": month, "day": day, "date": date  }
+      { "name": "17:00-18:00", "year": year, "month": month, "day": day, "date": date },
+      { "name": "18:00-19:00", "year": year, "month": month, "day": day, "date": date  }
     ]
     var dayclass ="days-item-text-select";
     var flag= false;
-    
+    // 获取数据库信息
+    const db = wx.cloud.database()
+    // 查询当前用户所有的 counters
+    db.collection('counters').where({
+        date: date
+
+    }).get({
+      success: res => {
+        this.setData({
+          queryResult: JSON.stringify(res.data, null, 2)
+        })
+        console.log('[数据库] [查询记录] 成功: ', res)
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '查询记录失败'
+        })
+        console.error('[数据库] [查询记录] 失败：', err)
+      }
+    })
     this.setData({
 
       dayInfos: dayInfos,
