@@ -23,8 +23,8 @@
     <view class="flex-item bc_green">
        <view class='ContentText'   style="flex-direction:row;">
         <view class='ContentTextValue' >{{item.name}}</view>
-        <view  class='ContentTextValue'>2/25</view>
-        <view class='ContentTextValue'><button data-name='{{item.name}}' data-date='{{item.date}}' bindtap='book'>预约</button></view>        
+        <view  class='ContentTextValue'>{{item.count}}/{{total}}</view>
+        <view class='ContentTextValue'><button  data-id='{{item.id}}' data-name='{{item.name}}' data-date='{{item.date}}' bindtap='book'>预约</button></view>        
        </view>
     </view>
     </block>

@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/home/index",
     "pages/index/index",
     "pages/userConsole/userConsole",
     "pages/storageConsole/storageConsole",
@@ -11,7 +12,12 @@
     "pages/openapi/serverapi/serverapi",
     "pages/openapi/callback/callback",
     "pages/openapi/cloudid/cloudid",
-    "pages/demo/ui-calendar"
+    "pages/demo/ui-calendar",
+    "pages/my/index"
+    
+   
+   
+
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -27,7 +33,7 @@
     "borderStyle": "white",
     "list": [
       { 
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/home/index",
         "text": "首页"
       },
       {       
@@ -35,8 +41,7 @@
         "text": "预约"
       },
       {      
-       
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/my/index",
         "text": "我"
       }
     ]

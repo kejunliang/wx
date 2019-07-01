@@ -13,9 +13,10 @@ Page({
     mouth: 0,
     flag:true,
     dayInfos: [
-                {"name": "17:00-18:00"},
-               { "name": "18:00-19:00"}
+      { "name": "17:00-18:00", "count": 0,"id":"0001"},
+      { "name": "18:00-19:00", "count": 0,"id":"0002"}
               ],
+    total:25,
   },
 
   /**
@@ -100,35 +101,58 @@ Page({
     this.updateDays(year, mouth)
   },
   getdayinfo:function(e){
-    console.log("点击当天事件")
-   
-    console.log(e)
+    
     var openid = getApp().globalData.openid //获取用户信息
     console.log("openid" + openid)
-
     var year = e.currentTarget.dataset.year
     var month = e.currentTarget.dataset.month
     var day = e.currentTarget.dataset.value
     console.log(year+"-"+month+"-"+day)
     var date = year + "-" + month + "-" + day
-    var dayInfos = [
-      { "name": "17:00-18:00", "year": year, "month": month, "day": day, "date": date },
-      { "name": "18:00-19:00", "year": year, "month": month, "day": day, "date": date  }
-    ]
-    var dayclass ="days-item-text-select";
-    var flag= false;
+    var dayclass = "days-item-text-select";
+    this.updateDays(year, month, day)
+    this.getBookData(date)
+   
+   
+  },
+  getBookData: function (date){
+
+    var flag = false;
+  
     // 获取数据库信息
     const db = wx.cloud.database()
     // 查询当前用户所有的 counters
     db.collection('counters').where({
-        date: date
+      date: date
 
     }).get({
       success: res => {
-        this.setData({
-          queryResult: JSON.stringify(res.data, null, 2)
+        var resData = res.data
+        var dayInfos = [
+          { "name": "17:00-18:00", "date": date, "count": 0, "id": "0001" },
+          { "name": "18:00-19:00", "date": date, "count": 0, "id": "0002" }
+        ]
+        // 根据日期返回的数据，用课程id去返回数据查找，找到了就增加数量显示
+        dayInfos.forEach(function (obj) {
+          console.log(obj)
+          console.log(resData)
+          var count = 0;
+          resData.forEach(function (resObj) {
+            if (resObj.classid == obj.id) {
+              
+              count = count + 1
+            }
+          })
+          obj.count = count  //将所有的数据返回给原来的对象
         })
-        console.log('[数据库] [查询记录] 成功: ', res)
+        console.log(dayInfos)
+        console.log('[数据库] [查询记录] 成功: ', res);
+        // console.log(day)
+        this.setData({
+          queryResult: resData,
+          dayInfos: dayInfos,
+          flag: flag
+        })
       },
       fail: err => {
         wx.showToast({
@@ -138,18 +162,12 @@ Page({
         console.error('[数据库] [查询记录] 失败：', err)
       }
     })
-    this.setData({
-
-      dayInfos: dayInfos,
-      flag:flag
-     
-    })
-    console.log(day)
-    this.updateDays(year, month, day)
+   
   },
   book:function(e){
     var date = e.currentTarget.dataset.date
     var name = e.currentTarget.dataset.name
+    var id = e.currentTarget.dataset.id
     const db = wx.cloud.database()
     var userInfo=getApp().globalData.userInfo //获取用户信息
     db.collection('counters').add({
@@ -157,7 +175,8 @@ Page({
         count: 1,
         name: userInfo.nickName,
         classname: name,
-        date:date
+        date:date,
+        classid:id
       },
       success: res => {
         // 在返回结果中会包含新创建的记录的 _id
@@ -166,9 +185,11 @@ Page({
           count: 1
         })
         wx.showToast({
-          title: '新增记录成功',
+          title: '预约成功',
         })
         console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
+        //预约成功后查询数据库
+         this.getBookData(date) 
       },
       fail: err => {
         wx.showToast({
@@ -186,7 +207,7 @@ Page({
     var mouth = date.getMonth() + 1;
     var day = date.getDate();
     this.updateDays(year, mouth, day)
-
+    this.getBookData(year+"-"+mouth+"-"+day) //根据默认日期获取列表数据
 
   },
   updateDays: function (year, mouth,day) {
@@ -210,7 +231,7 @@ Page({
     console.log(dateWeek);
     //向数组中添加天
     for (let index = 1; index <= dateDay; index++) {
-     // console.log(day+"=="+index)
+      console.log(day+"=="+index)
       if (day==index){
         days.push({ "value": index, "class": "days-item-text-select" })
       }else{
@@ -222,7 +243,7 @@ Page({
     for (let index = 1; index <= dateWeek; index++) {
       days.unshift(0)
     }
-    console.log(days)
+    //console.log(days)
   
     this.setData({
       days: days,
