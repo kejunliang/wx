@@ -111,23 +111,23 @@ Page({
     var date = year + "-" + month + "-" + day
     var dayclass = "days-item-text-select";
     this.updateDays(year, month, day)
-    this.getBookData(date)
+    this.getBookAll(date)
    
    
   },
-  getBookData: function (date){
-
+  getBookAll:function(date){
+    // 调用云函数
     var flag = false;
-  
-    // 获取数据库信息
-    const db = wx.cloud.database()
-    // 查询当前用户所有的 counters
-    db.collection('counters').where({
-      date: date
-
-    }).get({
+    var openid ="oiB4O0TkUCIFXnYESFkTuqXPDYfE" //getApp().globalData.openid //获取用户信息
+    wx.cloud.callFunction({
+      name: 'getdata',
+      data: {
+        date:date,
+        openid: "oiB4O0TkUCIFXnYESFkTuqXPDYfE"
+      },
       success: res => {
-        var resData = res.data
+        console.log('[云函数] [getdata] 所有结果: ', res.result)
+        var resData = res.result.data
         var dayInfos = [
           { "name": "17:00-18:00", "date": date, "count": 0, "id": "0001" },
           { "name": "18:00-19:00", "date": date, "count": 0, "id": "0002" }
@@ -139,7 +139,7 @@ Page({
           var count = 0;
           resData.forEach(function (resObj) {
             if (resObj.classid == obj.id) {
-              
+
               count = count + 1
             }
           })
@@ -153,18 +153,15 @@ Page({
           dayInfos: dayInfos,
           flag: flag
         })
+        
       },
       fail: err => {
-        wx.showToast({
-          icon: 'none',
-          title: '查询记录失败'
-        })
-        console.error('[数据库] [查询记录] 失败：', err)
+        console.error('[云函数] [login] 调用失败', err)
+       
       }
     })
-   
   },
-  book:function(e){
+   book:function(e){
     var date = e.currentTarget.dataset.date
     var name = e.currentTarget.dataset.name
     var id = e.currentTarget.dataset.id
@@ -189,7 +186,7 @@ Page({
         })
         console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
         //预约成功后查询数据库
-         this.getBookData(date) 
+        this.getBookAll(date) 
       },
       fail: err => {
         wx.showToast({
@@ -207,7 +204,7 @@ Page({
     var mouth = date.getMonth() + 1;
     var day = date.getDate();
     this.updateDays(year, mouth, day)
-    this.getBookData(year+"-"+mouth+"-"+day) //根据默认日期获取列表数据
+    this.getBookAll(year+"-"+mouth+"-"+day) //根据默认日期获取列表数据
 
   },
   updateDays: function (year, mouth,day) {

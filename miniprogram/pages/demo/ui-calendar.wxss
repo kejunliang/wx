@@ -96,3 +96,6 @@
   background:#07C160;
   margin: auto;
 }
+.ContentText .btnno{
+    background:lightgray;
+}

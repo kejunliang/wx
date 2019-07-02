@@ -22,10 +22,14 @@
     <block wx:for="{{dayInfos}}" wx:key="index">
     <view class="flex-item bc_green">
        <view class='ContentText'   style="flex-direction:row;">
-        <view class='ContentTextValue' >{{item.name}}</view>
-        <view  class='ContentTextValue'>{{item.count}}/{{total}}</view>
-        <view class='ContentTextValue'><button  data-id='{{item.id}}' data-name='{{item.name}}' data-date='{{item.date}}' bindtap='book'>预约</button></view>        
+          <view class='ContentTextValue' >{{item.name}}</view>
+          <view  class='ContentTextValue'>{{item.count}}/{{total}}</view>
+          <view wx:if="{{item.count<total}}"   class='ContentTextValue'><button  data-id='{{item.id}}' data-name='{{item.name}}' data-date='{{item.date}}' bindtap='book'>预约</button>
+          </view> 
+          <view wx:if="{{item.count>=total}}"   class='ContentTextValue'><button class='btnno' >已满</button>
+          </view>  
        </view>
+       
     </view>
     </block>
     
