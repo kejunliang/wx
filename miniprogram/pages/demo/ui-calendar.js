@@ -118,14 +118,21 @@ Page({
   getBookAll:function(date){
     // 调用云函数
     var flag = false;
-    var openid ="oiB4O0TkUCIFXnYESFkTuqXPDYfE" //getApp().globalData.openid //获取用户信息
+    var openid =getApp().globalData.openid //获取用户信息
+    console.log({
+      date: date,
+      openid: openid,
+      type: "dateandopenid"
+    })
     wx.cloud.callFunction({
       name: 'getdata',
       data: {
         date:date,
-        openid: "oiB4O0TkUCIFXnYESFkTuqXPDYfE"
+        openid: openid,
+        type:"dateandopenid"
       },
       success: res => {
+        
         console.log('[云函数] [getdata] 所有结果: ', res.result)
         var resData = res.result.data
         var dayInfos = [
@@ -162,6 +169,7 @@ Page({
     })
   },
    book:function(e){
+     var openid = getApp().globalData.openid
     var date = e.currentTarget.dataset.date
     var name = e.currentTarget.dataset.name
     var id = e.currentTarget.dataset.id
@@ -173,7 +181,8 @@ Page({
         name: userInfo.nickName,
         classname: name,
         date:date,
-        classid:id
+        classid:id,
+        dateAndopenid: date + openid
       },
       success: res => {
         // 在返回结果中会包含新创建的记录的 _id

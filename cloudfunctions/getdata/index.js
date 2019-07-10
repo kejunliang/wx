@@ -8,12 +8,14 @@ exports.main = async (event, context) => {
   console.log(event)
   console.log(context)
   const search = {
-    date: event.date
+    date:event.date,
+    _openid: event.openid
+
   }
- // search.date=event.date //传入参数
-  //if (event.openid){
-//    search._openid = event.openid //传入参数
-  //}
+      
+  console.log("查询条件")
+  console.log(search)
+
   const countResult = await db.collection('counters').where(search).count()
   const total = countResult.total
   // 计算需分几次取
@@ -25,9 +27,7 @@ exports.main = async (event, context) => {
     tasks.push(promise)
   }
   if (batchTimes==0){
-    const  promise = db.collection('counters').where({
-      date: event.date
-    }).get()
+    const promise = db.collection('counters').where(search).get()
     tasks.push(promise)
   }
   // 等待所有
