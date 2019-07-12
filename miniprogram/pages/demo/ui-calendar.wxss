@@ -72,7 +72,7 @@
 .flex-item{
   border-radius: 10rpx;
   margin: 10rpx;
-  height: 80px;
+  height: 120px;
   align-items:center;
   display: flex;
 }
@@ -98,4 +98,13 @@
 }
 .ContentText .btnno{
     background:lightgray;
+}
+.ContentText button.userinfo-avatar-xm{
+  width: 80rpx;
+  height: 80rpx;
+  margin: 0px 5px 5px 5px;
+  border-radius: 50%;
+  background-size: cover;
+  background-color: white;
+  background:10;
 }

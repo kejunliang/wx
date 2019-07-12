@@ -135,21 +135,27 @@ Page({
         
         console.log('[云函数] [getdata] 所有结果: ', res.result)
         var resData = res.result.data
+        var resLen=resData.length;
+        console.log("本人当天预定数量" + resLen)
         var dayInfos = [
           { "name": "17:00-18:00", "date": date, "count": 0, "id": "0001" },
           { "name": "18:00-19:00", "date": date, "count": 0, "id": "0002" }
         ]
         // 根据日期返回的数据，用课程id去返回数据查找，找到了就增加数量显示
+      
         dayInfos.forEach(function (obj) {
           console.log(obj)
           console.log(resData)
           var count = 0;
+          var imgArr = [];
           resData.forEach(function (resObj) {
             if (resObj.classid == obj.id) {
-
+              console.log(resObj.imgurl)
+              imgArr.push(resObj.imgurl)
               count = count + 1
             }
           })
+          obj.imgArr=imgArr
           obj.count = count  //将所有的数据返回给原来的对象
         })
         console.log(dayInfos)
@@ -158,9 +164,9 @@ Page({
         this.setData({
           queryResult: resData,
           dayInfos: dayInfos,
-          flag: flag
-        })
-        
+          flag: flag,
+          resLen:resLen
+        }) 
       },
       fail: err => {
         console.error('[云函数] [login] 调用失败', err)
@@ -175,6 +181,7 @@ Page({
     var id = e.currentTarget.dataset.id
     const db = wx.cloud.database()
     var userInfo=getApp().globalData.userInfo //获取用户信息
+    
     db.collection('counters').add({
       data: {
         count: 1,
@@ -182,7 +189,8 @@ Page({
         classname: name,
         date:date,
         classid:id,
-        dateAndopenid: date + openid
+        dateAndopenid: date + openid,
+        imgurl: userInfo.avatarUrl
       },
       success: res => {
         // 在返回结果中会包含新创建的记录的 _id

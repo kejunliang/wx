@@ -20,17 +20,24 @@
 
   <view class="flex-wrp" style="height: 300px;flex-direction:column;">
     <block wx:for="{{dayInfos}}" wx:key="index">
-    <view class="flex-item bc_green">
+    <view class="flex-item bc_green" style="flex-direction:column;">
        <view class='ContentText'   style="flex-direction:row;">
           <view class='ContentTextValue' >{{item.name}}</view>
           <view  class='ContentTextValue'>{{item.count}}/{{total}}</view>
-          <view wx:if="{{item.count<total}}"   class='ContentTextValue'><button  data-id='{{item.id}}' data-name='{{item.name}}' data-date='{{item.date}}' bindtap='book'>预约</button>
+          <view wx:if="{{item.count<total&&resLen<1}}"   class='ContentTextValue'><button  data-id='{{item.id}}' data-name='{{item.name}}' data-date='{{item.date}}' bindtap='book'>预约</button>
           </view> 
           <view wx:if="{{item.count>=total}}"   class='ContentTextValue'><button class='btnno' >已满</button>
           </view>  
+             <view wx:if="{{item.count<total&&resLen>=1}}"   class='ContentTextValue'><button class='btnno' >已预约</button>
+          </view>  
        </view>
-       
+        <view class="ContentText">
+         <block wx:for="{{item.imgArr}}" wx:key="index">
+             <button   class="userinfo-avatar-xm" style="background-image: url({{item}})"></button>
+         </block>
+        </view>
     </view>
+   
     </block>
     
   </view>

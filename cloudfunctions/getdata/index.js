@@ -10,7 +10,6 @@ exports.main = async (event, context) => {
   const search = {
     date:event.date,
     _openid: event.openid
-
   }
       
   console.log("查询条件")
